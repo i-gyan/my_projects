@@ -1,6 +1,8 @@
 # import libraries
 import pandas as pd
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 # checking for outliers in numerical columns
 
@@ -83,3 +85,58 @@ def format_column_name(df):
     updated_col_names = df.columns.tolist() 
     print("standardized columns names:\n")
     return updated_col_names
+    
+
+# Exploratory Data Analysis Plotting
+def plot_numerical_cols(df):
+    """
+    This function automatically selects all numerical columns (of types int64 and float64)
+    from the provided DataFrame and generates a histogram for each numerical column, showing the distribution
+    of the data. The histograms are displayed one at a time using Matplotlib and Seaborn.
+
+    Parameters:
+    df : pandas DataFrame
+
+    Returns:
+    Displays the histograms directly using Matplotlib and Seaborn. 
+    """
+    # Select numerical columns
+    num_cols = df.select_dtypes(include=['int64', 'float64']).columns  
+
+    # Plot histograms for each numerical column
+    for col in num_cols: #loop through all numerical columns
+        plt.figure(figsize=(8, 6))
+        sns.histplot(data=df, x=col, color='blue')
+        plt.title(f"Distribution of {col}")
+        plt.xlabel(col)
+        plt.ylabel("Frequency")
+        plt.tight_layout()
+        plt.show()
+
+
+def plot_categorical_cols(df):
+
+    """
+    This function automatically selects all categorical columns (objects)
+    from the provided DataFrame and generates a countplot for each column, showing the distribution
+    of the data.
+    
+    Parameters:
+    df : pandas DataFrame
+
+    Returns:
+    Displays the countplot of each categorical column directly using Matplotlib and Seaborn. 
+    """
+    # Select categorical columns
+    categorical_cols = df.select_dtypes(include=['object']).columns
+    
+    # Plot count plots for categorical variables
+    for col in categorical_cols: # loop through all categorical columns
+        plt.figure(figsize=(8, 6))
+        sns.countplot(data=df, x=col, hue=df[col], palette="viridis")  
+        plt.title(f"Distribution of {col}")
+        plt.xlabel(col)
+        plt.ylabel("Frequency")
+        plt.xticks(rotation=45)  # Rotate for better readability if needed
+        plt.tight_layout()
+        plt.show()
